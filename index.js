@@ -2,7 +2,9 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
+const cors = require('cors')
 
+app.use(cors())
 app.use(bodyParser.json())
 
 morgan.token('postbody', function (req, res) {return JSON.stringify(req.body)})
@@ -80,7 +82,7 @@ app.get('/info', (req, res) => {
   res.send(`Puhelinluettelossa ${amount} henkilön tiedot </br> ${date}`)
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log('Server running on port ', PORT)
 })
