@@ -35,7 +35,11 @@ app.post('/api/persons', (req, res) => {
   const body = req.body
 
   if (body.name === undefined || body.number === undefined) {
-    return res.status(400).json({error: 'content missing'})
+    return res.status(400).json({error: 'name or number missing'})
+  }
+
+  if (persons.find(p => p.name === body.name)) {
+    return res.status(400).json({error: 'name must be unique'})
   }
 
   const id = Math.floor(Math.random() * Math.floor(100000000))
