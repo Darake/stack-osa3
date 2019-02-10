@@ -13,29 +13,6 @@ app.use(bodyParser.json())
 morgan.token('postbody', function (req, res) {return JSON.stringify(req.body)})
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postbody'))
 
-let persons = [
-  {
-    id: 1,
-    name: 'Arto Hellas',
-    number: '045-1236543'
-  },
-  {
-    id: 2,
-    name: 'Arto Järvinen',
-    number: '041-21423123'
-  },
-  {
-    id: 3,
-    name: 'Lea Kutvonen',
-    number: '040-4323234'
-  },
-  {
-    id: 4,
-    name: 'Martti Tienari',
-    number: '09-784232'
-  }
-]
-
 app.get('/api/persons', (req, res, next) => {
   Person.find({})
     .then(people => {
@@ -61,12 +38,13 @@ app.post('/api/persons', (req, res, next) => {
     .catch(error => next(error))
 })
 
-app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const person = persons.find(p => p.id === id)
-
-  if (person) res.json(person)
-  else res.status(404).end()
+app.get('/api/persons/:id', (req, res, next) => {
+  Person.findById(req.params.id)
+    .then(person => {
+      if (person) res.json(person.toJSON())
+      else res.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
@@ -90,10 +68,13 @@ app.put('/api/persons/:id', (req, res, next) => {
     .catch(error => next(error))
 })
 
-app.get('/info', (req, res) => {
+app.get('/info', (req, res, next) => {
   date = new Date()
-  amount = persons.length
-  res.send(`Puhelinluettelossa ${amount} henkilön tiedot </br> ${date}`)
+  Person.find({})
+  .then(people => {
+    res.send(`Puhelinluettelossa ${people.length} henkilön tiedot </br> ${date}`)
+  })
+  .catch(error => next(error))
 })
 
 const unkownEndpoint = (req, res) => {
