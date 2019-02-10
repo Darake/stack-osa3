@@ -67,12 +67,12 @@ app.put('/api/persons/:id', (req, res, next) => {
 })
 
 app.get('/info', (req, res, next) => {
-  date = new Date()
+  const date = new Date()
   Person.find({})
-  .then(people => {
-    res.send(`Puhelinluettelossa ${people.length} henkilön tiedot </br> ${date}`)
-  })
-  .catch(error => next(error))
+    .then(people => {
+      res.send(`Puhelinluettelossa ${people.length} henkilön tiedot </br> ${date}`)
+    })
+    .catch(error => next(error))
 })
 
 const unkownEndpoint = (req, res) => {
