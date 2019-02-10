@@ -1,1 +1,1 @@
-DELETE https://radiant-beach-48390.herokuapp.com/api/persons/4
+DELETE http://localhost:3001/api/persons/5c5f5e237149c86d8d6e681c
